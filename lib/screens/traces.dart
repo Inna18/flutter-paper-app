@@ -26,12 +26,12 @@ class _TracesScreenState extends State<TracesScreen> {
               child: Container(
                 decoration:
                     const BoxDecoration(color: Color.fromRGBO(1, 20, 57, 1)),
-                child: Positioned(
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Expanded(
+                child: Stack(children: [
+                  Positioned(
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
                     child: Container(
                       decoration: const BoxDecoration(
                           color: Color.fromRGBO(255, 255, 255, 1),
@@ -40,7 +40,7 @@ class _TracesScreenState extends State<TracesScreen> {
                               topRight: Radius.circular(24))),
                     ),
                   ),
-                ),
+                ]),
               ),
             ),
           ],
