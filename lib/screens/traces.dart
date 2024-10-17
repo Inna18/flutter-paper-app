@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:paper_app/data/dummy_data.dart';
 import 'package:paper_app/widgets/traces_list.dart';
+import 'package:top_modal_sheet/top_modal_sheet.dart';
 
 class TracesScreen extends StatefulWidget {
   const TracesScreen({super.key});
@@ -12,6 +13,18 @@ class TracesScreen extends StatefulWidget {
 }
 
 class _TracesScreenState extends State<TracesScreen> {
+  void _showSearchFilter() {
+    print('clicked');
+    showTopModalSheet(
+      context,
+      Icon(
+        Icons.abc,
+        size: 100,
+      ),
+      backgroundColor: Colors.white,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +56,9 @@ class _TracesScreenState extends State<TracesScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Search component here...'),
+                          TextButton(
+                              onPressed: () => _showSearchFilter(),
+                              child: Text('Search')),
                           Text(
                             '총 ${currentTraces.length}건',
                             textAlign: TextAlign.start,
