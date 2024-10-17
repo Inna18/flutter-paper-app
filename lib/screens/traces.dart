@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:paper_app/data/dummy_data.dart';
+import 'package:paper_app/widgets/search_filter.dart';
 import 'package:paper_app/widgets/traces_list.dart';
 import 'package:top_modal_sheet/top_modal_sheet.dart';
 
@@ -15,14 +16,10 @@ class TracesScreen extends StatefulWidget {
 class _TracesScreenState extends State<TracesScreen> {
   void _showSearchFilter() {
     print('clicked');
-    showTopModalSheet(
-      context,
-      Icon(
-        Icons.abc,
-        size: 100,
-      ),
-      backgroundColor: Colors.white,
-    );
+    showTopModalSheet(context, SearchFilter(),
+        backgroundColor: Colors.white,
+        borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16)));
   }
 
   @override
