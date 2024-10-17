@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       title: '스마트팟 고객사 전용 페이지',
       theme: ThemeData(
         colorScheme:
-            ColorScheme.fromSeed(seedColor: Color.fromRGBO(1, 20, 57, 1)),
+            ColorScheme.fromSeed(seedColor: const Color.fromRGBO(1, 20, 57, 1)),
         useMaterial3: true,
       ),
       home: const TracesScreen(),

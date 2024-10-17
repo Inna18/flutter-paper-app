@@ -16,7 +16,7 @@ const currentTraces = [
   Trace(
     txId: '544c4b20-5820-3120-0063-e382aad443fb',
     coldChainType: ColdChainType.etc,
-    invoiceCode: '주문번호',
+    invoiceCode: '123',
     status: Status.shutdown,
     username: '김인나',
     serialNumber: 'TLK-SPX1-001',
@@ -28,7 +28,7 @@ const currentTraces = [
   Trace(
     txId: '544c4b20-5820-3120-000b-d979ca60fa49',
     coldChainType: ColdChainType.pharma,
-    invoiceCode: '주문번호',
+    invoiceCode: '0912T',
     status: Status.moving,
     username: '김인나',
     serialNumber: 'TLK-SPX1-016',

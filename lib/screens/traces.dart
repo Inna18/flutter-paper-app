@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paper_app/data/dummy_data.dart';
 import 'package:paper_app/widgets/traces_list.dart';
 
 class TracesScreen extends StatefulWidget {
@@ -34,15 +35,21 @@ class _TracesScreenState extends State<TracesScreen> {
                     right: 0,
                     child: Container(
                       decoration: const BoxDecoration(
-                          color: Color.fromRGBO(255, 255, 255, 1),
+                          color: Color.fromRGBO(250, 252, 255, 1),
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(24),
                               topRight: Radius.circular(24))),
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Search component here...'),
-                          
+                          const Text('Search component here...'),
+                          Text(
+                            '총 ${currentTraces.length}건',
+                            textAlign: TextAlign.start,
+                          ),
+                          const Expanded(
+                              child: TracesList(traceList: currentTraces)),
                         ],
                       ),
                     ),
