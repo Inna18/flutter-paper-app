@@ -38,6 +38,13 @@ class _TracesScreenState extends State<TracesScreen> {
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(24),
                               topRight: Radius.circular(24))),
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        children: [
+                          Text('Search component here...'),
+                          
+                        ],
+                      ),
                     ),
                   ),
                 ]),
