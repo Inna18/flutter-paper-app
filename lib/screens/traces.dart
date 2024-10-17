@@ -56,9 +56,46 @@ class _TracesScreenState extends State<TracesScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TextButton(
-                              onPressed: () => _showSearchFilter(),
-                              child: Text('Search')),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextButton(
+                                    style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.all(0),
+                                      splashFactory: NoSplash.splashFactory,
+                                    ),
+                                    onPressed: () => _showSearchFilter(),
+                                    child: Container(
+                                      width: 500,
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 0, vertical: 8),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12, horizontal: 8),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: const Color.fromRGBO(
+                                                  161, 163, 179, 1)),
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(8))),
+                                      child: const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('전체',
+                                              style: TextStyle(
+                                                  color: Color.fromRGBO(
+                                                      161, 163, 179, 1))),
+                                          Icon(
+                                            Icons.search,
+                                            color: Color.fromRGBO(
+                                                161, 163, 179, 1),
+                                          )
+                                        ],
+                                      ),
+                                    )),
+                              ),
+                            ],
+                          ),
                           Text(
                             '총 ${currentTraces.length}건',
                             textAlign: TextAlign.start,

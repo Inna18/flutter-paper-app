@@ -9,7 +9,7 @@ class TraceItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(horizontal: 0, vertical: 6),
+      margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 6),
       color: Colors.white,
       shadowColor: Colors.transparent,
       shape: RoundedRectangleBorder(
@@ -20,55 +20,44 @@ class TraceItem extends StatelessWidget {
         child: Column(
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
                       children: [
-                        SizedBox(
-                          width: 90,
-                          child: Text(
-                            '유형: ${trace.coldChainType.name}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                        Text(
+                          '유형: ${trace.coldChainType.name}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 4),
                           child: Text('|'),
                         ),
-                        SizedBox(
-                          width: 134,
-                          child: Text(
-                            '주문번호: ${trace.invoiceCode}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                        Text(
+                          '주문번호: ${trace.invoiceCode}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                     Row(
                       children: [
-                        SizedBox(
-                          width: 90,
-                          child: Text(
-                            '출고자: ${trace.username}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                        Text(
+                          '출고자: ${trace.username}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                         const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 4),
                           child: Text('|'),
                         ),
-                        SizedBox(
-                          width: 134,
-                          child: Text(
-                            'S/N: ${trace.serialNumber}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                        Text(
+                          'S/N: ${trace.serialNumber}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
@@ -86,42 +75,32 @@ class TraceItem extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        SizedBox(
-                          width: 224,
-                          child: Text(
-                            '출발: ${trace.departureAt}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                        Text(
+                          '출발: ${trace.departureAt}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                     Row(
                       children: [
-                        SizedBox(
-                          width: 224,
-                          child: Text(
-                            '도착: ${trace.arrivalAt}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                        Text(
+                          '도착: ${trace.arrivalAt}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
                     Row(
                       children: [
-                        SizedBox(
-                          child: Text(
-                            '업로드: ${trace.loggingStatus}',
-                          ),
+                        Text(
+                          '업로드: ${trace.loggingStatus}',
                         ),
                       ],
                     )
                   ],
                 ),
-                const SizedBox(width: 32),
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Row(
                       children: [
