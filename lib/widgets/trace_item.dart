@@ -27,7 +27,7 @@ class TraceItem extends StatelessWidget {
                     Row(
                       children: [
                         SizedBox(
-                          width: 80,
+                          width: 90,
                           child: Text(
                             '유형: ${trace.coldChainType.name}',
                             maxLines: 1,
@@ -39,7 +39,7 @@ class TraceItem extends StatelessWidget {
                           child: Text('|'),
                         ),
                         SizedBox(
-                          width: 120,
+                          width: 134,
                           child: Text(
                             '주문번호: ${trace.invoiceCode}',
                             maxLines: 1,
@@ -51,7 +51,7 @@ class TraceItem extends StatelessWidget {
                     Row(
                       children: [
                         SizedBox(
-                          width: 80,
+                          width: 90,
                           child: Text(
                             '출고자: ${trace.username}',
                             maxLines: 1,
@@ -63,7 +63,7 @@ class TraceItem extends StatelessWidget {
                           child: Text('|'),
                         ),
                         SizedBox(
-                          width: 120,
+                          width: 134,
                           child: Text(
                             'S/N: ${trace.serialNumber}',
                             maxLines: 1,
@@ -75,7 +75,7 @@ class TraceItem extends StatelessWidget {
                     Row(
                       children: [
                         SizedBox(
-                          width: 200,
+                          width: 224,
                           child: Text(
                             '목적지: ${trace.groupName}',
                             maxLines: 1,
@@ -87,7 +87,7 @@ class TraceItem extends StatelessWidget {
                     Row(
                       children: [
                         SizedBox(
-                          width: 200,
+                          width: 224,
                           child: Text(
                             '출발: ${trace.departureAt}',
                             maxLines: 1,
@@ -99,7 +99,7 @@ class TraceItem extends StatelessWidget {
                     Row(
                       children: [
                         SizedBox(
-                          width: 200,
+                          width: 224,
                           child: Text(
                             '도착: ${trace.arrivalAt}',
                             maxLines: 1,
