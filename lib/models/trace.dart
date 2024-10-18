@@ -1,6 +1,8 @@
-enum ColdChainType { pharma, frozen, deep_freeze, etc }
+enum ColdChainType { all, pharma, frozen, deep_freeze, etc }
 
 enum Status { ready, moving, done, shutdown }
+
+enum SearchPeriodType { departureAt, arrivalAt }
 
 class Trace {
   const Trace({
