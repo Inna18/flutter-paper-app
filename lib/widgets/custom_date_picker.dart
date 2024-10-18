@@ -126,6 +126,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
 
     return SizedBox(
       height: 320,
+      width: 320,
       child: Column(
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [

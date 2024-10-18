@@ -15,11 +15,13 @@ class TracesScreen extends StatefulWidget {
 
 class _TracesScreenState extends State<TracesScreen> {
   void _showSearchFilter() {
-    print('clicked');
-    showTopModalSheet(context, SearchFilter(),
-        backgroundColor: Colors.white,
-        borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16)));
+    showTopModalSheet(
+      context,
+      SearchFilter(),
+      backgroundColor: Colors.white,
+      borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
+    );
   }
 
   @override

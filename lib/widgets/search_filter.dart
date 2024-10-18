@@ -39,11 +39,30 @@ class _SearchFilterState extends State<SearchFilter> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Row(
-              children: [
-                TextButton(onPressed: () {}, child: const Text('출발일자')),
-                TextButton(onPressed: () {}, child: const Text('도착일자')),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              child: Row(
+                children: [
+                  InkWell(
+                    onTap: () {},
+                    splashFactory: NoSplash.splashFactory,
+                    highlightColor: Colors.transparent,
+                    child: const Text(
+                      '출발일자',
+                      style: TextStyle(color: Color.fromRGBO(214, 220, 237, 1)),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  InkWell(
+                    onTap: () {},
+                    splashFactory: NoSplash.splashFactory,
+                    highlightColor: Colors.transparent,
+                    child: const Text('도착일자',
+                        style:
+                            TextStyle(color: Color.fromRGBO(214, 220, 237, 1))),
+                  ),
+                ],
+              ),
             ),
           ),
           CustomDatePicker(
@@ -60,22 +79,70 @@ class _SearchFilterState extends State<SearchFilter> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Row(
-              children: [
-                TextButton(onPressed: () {}, child: const Text('전체')),
-                TextButton(onPressed: () {}, child: const Text('냉장')),
-                TextButton(onPressed: () {}, child: const Text('냉동1')),
-                TextButton(onPressed: () {}, child: const Text('냉동2')),
-                TextButton(onPressed: () {}, child: const Text('사용자 설정')),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              child: Row(
+                children: [
+                  InkWell(
+                    onTap: () {},
+                    splashFactory: NoSplash.splashFactory,
+                    highlightColor: Colors.transparent,
+                    child: const Text('전체',
+                        style:
+                            TextStyle(color: Color.fromRGBO(214, 220, 237, 1))),
+                  ),
+                  const SizedBox(width: 16),
+                  InkWell(
+                    onTap: () {},
+                    splashFactory: NoSplash.splashFactory,
+                    highlightColor: Colors.transparent,
+                    child: const Text('냉장',
+                        style:
+                            TextStyle(color: Color.fromRGBO(214, 220, 237, 1))),
+                  ),
+                  const SizedBox(width: 16),
+                  InkWell(
+                    onTap: () {},
+                    splashFactory: NoSplash.splashFactory,
+                    highlightColor: Colors.transparent,
+                    child: const Text('냉동1',
+                        style:
+                            TextStyle(color: Color.fromRGBO(214, 220, 237, 1))),
+                  ),
+                  const SizedBox(width: 16),
+                  InkWell(
+                    onTap: () {},
+                    splashFactory: NoSplash.splashFactory,
+                    highlightColor: Colors.transparent,
+                    child: const Text('냉동2',
+                        style:
+                            TextStyle(color: Color.fromRGBO(214, 220, 237, 1))),
+                  ),
+                  const SizedBox(width: 16),
+                  InkWell(
+                    onTap: () {},
+                    splashFactory: NoSplash.splashFactory,
+                    highlightColor: Colors.transparent,
+                    child: const Text('사용자 설정',
+                        style:
+                            TextStyle(color: Color.fromRGBO(214, 220, 237, 1))),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 8),
           TextField(
+            onChanged: (value) {},
             decoration: InputDecoration(
                 contentPadding: const EdgeInsets.all(10),
                 suffixIcon: const Icon(Icons.search),
                 iconColor: const Color.fromRGBO(214, 220, 237, 1),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                  borderSide: const BorderSide(
+                      width: 1, color: Color.fromRGBO(214, 220, 237, 1)),
+                ),
                 enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(
                       color: Color.fromRGBO(214, 220, 237, 1),
