@@ -3,10 +3,10 @@ import 'package:intl/intl.dart';
 
 class CustomDatePicker extends StatefulWidget {
   const CustomDatePicker(
-      {required this.defaultDate, required this.selectDate, super.key});
+      {required this.defaultRange, required this.selectRange, super.key});
 
-  final DateTime? defaultDate;
-  final void Function(DateTime date) selectDate;
+  final List<DateTime> defaultRange;
+  final void Function(List<DateTime> dates) selectRange;
 
   @override
   State<StatefulWidget> createState() {
@@ -17,7 +17,7 @@ class CustomDatePicker extends StatefulWidget {
 class _CustomDatePickerState extends State<CustomDatePicker> {
   List<String> weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   DateTime _today = DateTime.now();
-  DateTime _selectedDate = DateTime.now();
+  final List<DateTime> _selectedRange = [DateTime.now(), DateTime.now()];
   // Sunday = 0
   int prevMLastDay =
       (DateTime(DateTime.now().year, DateTime.now().month, 0).day);
@@ -35,8 +35,6 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
   @override
   void initState() {
     super.initState();
-    _selectedDate = widget.defaultDate ?? DateTime.now();
-    _today = _selectedDate;
     firstDay = prevMLastWeekday == 6
         ? 0
         : DateTime(DateTime.now().year, DateTime.now().month, 0).day -
@@ -113,15 +111,15 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
     }
 
     void setSelectedDate(int type, int day) {
-      if (type == 0) {
-        _selectedDate = DateTime(_today.year, _today.month - 1, day);
-      } else if (type == 1) {
-        _selectedDate = DateTime(_today.year, _today.month, day);
-      } else {
-        _selectedDate = DateTime(_today.year, _today.month + 1, day);
-      }
+      // if (type == 0) {
+      //   _selectedDate = DateTime(_today.year, _today.month - 1, day);
+      // } else if (type == 1) {
+      //   _selectedDate = DateTime(_today.year, _today.month, day);
+      // } else {
+      //   _selectedDate = DateTime(_today.year, _today.month + 1, day);
+      // }
 
-      widget.selectDate(_selectedDate!);
+      // widget.selectDate(_selectedDate!);
     }
 
     return SizedBox(
@@ -190,18 +188,6 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                         width: 36,
                         padding: const EdgeInsets.symmetric(
                             horizontal: 6, vertical: 4),
-                        decoration: (isSelected &&
-                                    _selectedDate.year == _today.year &&
-                                    _selectedDate.month == _today.month - 1 &&
-                                    day == _selectedDate.day) ||
-                                (_selectedDate.year == _today.year &&
-                                    _selectedDate.month == _today.month - 1 &&
-                                    day == _selectedDate.day)
-                            ? BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: Colors.blue[100])
-                            : const BoxDecoration(
-                                color: Color.fromRGBO(0, 0, 0, 0)),
                         child: Align(
                           alignment: Alignment.center,
                           child: Text(
@@ -224,18 +210,6 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                     child: Container(
                         height: 32,
                         width: 36,
-                        decoration: (isSelected &&
-                                    _selectedDate.year == _today.year &&
-                                    _selectedDate.month == _today.month &&
-                                    day == _selectedDate.day) ||
-                                (_selectedDate.year == _today.year &&
-                                    _selectedDate.month == _today.month &&
-                                    day == _selectedDate.day)
-                            ? BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: Colors.blue[100])
-                            : const BoxDecoration(
-                                color: Color.fromRGBO(0, 0, 0, 0)),
                         child: Align(
                             alignment: Alignment.center,
                             child: isToday(day)
@@ -263,18 +237,6 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                     child: Container(
                         height: 32,
                         width: 36,
-                        decoration: (isSelected &&
-                                    _selectedDate.year == _today.year &&
-                                    _selectedDate.month == _today.month + 1 &&
-                                    day == _selectedDate.day) ||
-                                (_selectedDate.year == _today.year &&
-                                    _selectedDate.month == _today.month + 1 &&
-                                    day == _selectedDate.day)
-                            ? BoxDecoration(
-                                borderRadius: BorderRadius.circular(50),
-                                color: Colors.blue[100])
-                            : const BoxDecoration(
-                                color: Color.fromRGBO(0, 0, 0, 0)),
                         child: Align(
                           alignment: Alignment.center,
                           child: Text(

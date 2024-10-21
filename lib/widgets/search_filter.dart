@@ -24,7 +24,7 @@ class _SearchFilterState extends State<SearchFilter> {
     });
   }
 
-  void _selectDate(DateTime date) {}
+  void _selectRange(List<DateTime> date) {}
 
   void _changeSearchColdChain(ColdChainType coldType) {
     setState(() {
@@ -110,7 +110,7 @@ class _SearchFilterState extends State<SearchFilter> {
             ),
           ),
           CustomDatePicker(
-              defaultDate: DateTime.now(), selectDate: _selectDate),
+              defaultRange: [startAt, endAt], selectRange: _selectRange),
           const Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
