@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paper_app/screens/traces.dart';
 import 'package:paper_app/service/login_service.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -84,9 +85,14 @@ class _LoginScreen extends State<LoginScreen> {
   }
 
   void _login() {
-    print(_codeController.text);
-    print(password);
-    _loginService.login(_codeController.text, password.join());
+    _loginService.login(_codeController.text, password.join()).then((value) {
+      if (value.body.contains('성공')) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (ctx) => const TracesScreen()));
+      } else {
+        print('error: ${value.body}');
+      }
+    });
   }
 
   @override
