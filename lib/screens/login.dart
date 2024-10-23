@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:paper_app/service/login_service.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -10,6 +11,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreen extends State<LoginScreen> {
+  LoginService _loginService = LoginService();
   FocusScopeNode focus = FocusScopeNode();
   final _codeController = TextEditingController();
 
@@ -84,6 +86,7 @@ class _LoginScreen extends State<LoginScreen> {
   void _login() {
     print(_codeController.text);
     print(password);
+    _loginService.login(_codeController.text, password.join());
   }
 
   @override
