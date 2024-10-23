@@ -10,19 +10,57 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreen extends State<LoginScreen> {
+  FocusScopeNode focus = FocusScopeNode();
+  final _codeController = TextEditingController();
+
+  var password = ['', '', '', '', '', ''];
   bool remember = false;
+
+  @override
+  void dispose() {
+    _codeController.dispose();
+    super.dispose();
+  }
+
+  void _changeFocus(String inputValue, int index) async {
+    setState(() {
+      if (inputValue.isNotEmpty) {
+        if (password[index].isEmpty) {
+          password[index] = inputValue;
+        }
+      } else {
+        password[index] = '';
+      }
+    });
+    focus = FocusScope.of(context);
+    if (inputValue.length == 1 && index < password.length) {
+      if (index + 1 < password.length && password[index + 1] == '') {
+        focus.nextFocus();
+      }
+    }
+    if (inputValue.isEmpty && index != 0) focus.previousFocus();
+  }
 
   List<Widget> getPasswordField() {
     List<Widget> passwordField = [];
     for (var i = 0; i < 6; i++) {
       passwordField.add(Container(
-        margin: EdgeInsets.symmetric(horizontal: 6),
+        margin: const EdgeInsets.symmetric(horizontal: 6),
         width: 40,
-        height: 40,
+        height: 60,
         child: TextField(
+          maxLength: 1,
+          style: TextStyle(
+            color: focus.hasFocus && i < password.length && password[i] != ''
+                ? const Color.fromRGBO(70, 133, 255, 1)
+                : Colors.white,
+          ),
           decoration: InputDecoration(
               filled: true,
-              fillColor: Colors.white,
+              fillColor:
+                  focus.hasFocus && i < password.length && password[i] != ''
+                      ? const Color.fromRGBO(70, 133, 255, 1)
+                      : Colors.white,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               focusedBorder: OutlineInputBorder(
@@ -30,16 +68,22 @@ class _LoginScreen extends State<LoginScreen> {
                 borderSide: const BorderSide(
                     width: 1, color: Color.fromRGBO(195, 205, 219, 1)),
               ),
-              enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Color.fromRGBO(195, 205, 219, 1),
-                    width: 1,
-                  ),
-                  borderRadius: BorderRadius.circular(4))),
+              enabledBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(
+                color: Color.fromRGBO(195, 205, 219, 1),
+                width: 1,
+              ))),
+          onChanged: (value) => _changeFocus(value, i),
+          // obscureText: true,
         ),
       ));
     }
     return passwordField;
+  }
+
+  void _login() {
+    print(_codeController.text);
+    print(password);
   }
 
   @override
@@ -89,6 +133,7 @@ class _LoginScreen extends State<LoginScreen> {
                       children: [
                         Expanded(
                           child: TextField(
+                            controller: _codeController,
                             decoration: InputDecoration(
                                 hintText: '고객사 코드를 입력해주세요.',
                                 filled: true,
@@ -143,7 +188,6 @@ class _LoginScreen extends State<LoginScreen> {
                               setState(() {
                                 remember = !remember;
                               });
-                              print(remember);
                             },
                             controlAffinity: ListTileControlAffinity.leading,
                             overlayColor:
@@ -168,7 +212,7 @@ class _LoginScreen extends State<LoginScreen> {
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4))),
-                      onPressed: () {},
+                      onPressed: () => _login(),
                       child: const Text(
                         '로그인',
                         style: TextStyle(fontWeight: FontWeight.bold),
