@@ -17,8 +17,17 @@ class _TracesScreenState extends State<TracesScreen> {
   TraceService traceService = TraceService();
   List<dynamic> traces = [];
 
+  @override
+  void initState() {
+    _fetchTrace();
+    super.initState();
+  }
+
   void _fetchTrace() async {
-    traces = await traceService.getTraceList();
+    var traceList = await traceService.getTraceList();
+    setState(() {
+      traces = traceList;
+    });
   }
 
   void _showSearchFilter() {
@@ -106,7 +115,7 @@ class _TracesScreenState extends State<TracesScreen> {
                             '총 ${traces.length}건',
                             textAlign: TextAlign.start,
                           ),
-                          Expanded(child: TracesList(traceList: [])),
+                          Expanded(child: TracesList(traceList: traces)),
                         ],
                       ),
                     ),

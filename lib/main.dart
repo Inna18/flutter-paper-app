@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
             ColorScheme.fromSeed(seedColor: const Color.fromRGBO(1, 20, 57, 1)),
         useMaterial3: true,
       ),
-      home: const LoginScreen(),
+      home: const TracesScreen(),
     );
   }
 }
