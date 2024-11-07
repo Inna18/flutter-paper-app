@@ -28,7 +28,7 @@ class TraceItem extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          '유형: ${trace.coldChainType.name}',
+                          '유형: ${trace.coldChainType}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -105,7 +105,7 @@ class TraceItem extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          trace.status.name,
+                          trace.status,
                           textAlign: TextAlign.end,
                         ),
                       ],

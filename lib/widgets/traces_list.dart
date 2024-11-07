@@ -5,7 +5,7 @@ import 'package:paper_app/widgets/trace_item.dart';
 class TracesList extends StatelessWidget {
   const TracesList({required this.traceList, super.key});
 
-  final List<Trace> traceList;
+  final List<dynamic> traceList;
 
   @override
   Widget build(BuildContext context) {

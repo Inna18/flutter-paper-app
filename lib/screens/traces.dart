@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:paper_app/data/dummy_data.dart';
 import 'package:paper_app/widgets/search_filter.dart';
 import 'package:paper_app/widgets/traces_list.dart';
 import 'package:top_modal_sheet/top_modal_sheet.dart';
+import 'package:paper_app/service/trace_service.dart';
 
 class TracesScreen extends StatefulWidget {
   const TracesScreen({super.key});
@@ -14,10 +14,17 @@ class TracesScreen extends StatefulWidget {
 }
 
 class _TracesScreenState extends State<TracesScreen> {
+  TraceService traceService = TraceService();
+  List<dynamic> traces = [];
+
+  void _fetchTrace() async {
+    traces = await traceService.getTraceList();
+  }
+
   void _showSearchFilter() {
     showTopModalSheet(
       context,
-      SearchFilter(),
+      const SearchFilter(),
       backgroundColor: Colors.white,
       borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
@@ -96,11 +103,10 @@ class _TracesScreenState extends State<TracesScreen> {
                             ],
                           ),
                           Text(
-                            '총 ${currentTraces.length}건',
+                            '총 ${traces.length}건',
                             textAlign: TextAlign.start,
                           ),
-                          const Expanded(
-                              child: TracesList(traceList: currentTraces)),
+                          Expanded(child: TracesList(traceList: [])),
                         ],
                       ),
                     ),

@@ -12,7 +12,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreen extends State<LoginScreen> {
-  LoginService _loginService = LoginService();
+  final LoginService _loginService = LoginService();
   FocusScopeNode focus = FocusScopeNode();
   final _codeController = TextEditingController();
 

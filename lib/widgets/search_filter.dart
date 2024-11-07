@@ -15,7 +15,7 @@ class _SearchFilterState extends State<SearchFilter> {
   SearchPeriodType searchType = SearchPeriodType.departureAt;
   DateTime startAt = DateTime.now();
   DateTime endAt = DateTime.now();
-  ColdChainType searchColdChain = ColdChainType.all;
+  String searchColdChain = 'all';
   String keyword = '';
 
   void _changeSelectPeriodType(SearchPeriodType periodType) {
@@ -26,18 +26,18 @@ class _SearchFilterState extends State<SearchFilter> {
 
   void _selectRange(List<DateTime> date) {}
 
-  void _changeSearchColdChain(ColdChainType coldType) {
+  void _changeSearchColdChain(String coldType) {
     setState(() {
       searchColdChain = coldType;
     });
   }
 
-  String _getLabel(ColdChainType coldChain) {
-    if (coldChain == ColdChainType.all) return '전체';
-    if (coldChain == ColdChainType.pharma) return '냉장';
-    if (coldChain == ColdChainType.frozen) return '냉동1';
-    if (coldChain == ColdChainType.deep_freeze) return '냉동2';
-    if (coldChain == ColdChainType.etc) return '사용자 설정';
+  String _getLabel(String coldChain) {
+    if (coldChain == 'all') return '전체';
+    if (coldChain == 'pharma') return '냉장';
+    if (coldChain == 'frozen') return '냉동1';
+    if (coldChain == 'deep_freeze') return '냉동2';
+    if (coldChain == 'etc') return '사용자 설정';
     return '';
   }
 
@@ -126,7 +126,7 @@ class _SearchFilterState extends State<SearchFilter> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Row(
-                  children: ColdChainType.values
+                  children: ['all', 'pharma', 'frozen', 'deep_freeze', 'etc']
                       .map(
                         (coldChain) => InkWell(
                           onTap: () => _changeSearchColdChain(coldChain),
