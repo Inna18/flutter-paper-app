@@ -1,6 +1,23 @@
-// enum ColdChainType { all, pharma, frozen, deep_freeze, etc }
+enum ColdChainType {
+  all('전체'),
+  pharma('냉장'),
+  frozen('냉동1'),
+  deepFreeze('냉동2'),
+  etc('사용자 설정');
 
-// enum Status { ready, moving, done, shutdown }
+  final String name;
+  const ColdChainType(this.name);
+}
+
+enum InvoiceStatus {
+  ready('활성'),
+  moving('이동'),
+  done('도착'),
+  shutdown('강제 종료');
+
+  final String name;
+  const InvoiceStatus(this.name);
+}
 
 enum SearchPeriodType { departureAt, arrivalAt }
 

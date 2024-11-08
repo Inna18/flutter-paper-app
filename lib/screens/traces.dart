@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:paper_app/screens/login.dart';
 import 'package:paper_app/widgets/search_filter.dart';
 import 'package:paper_app/widgets/traces_list.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:top_modal_sheet/top_modal_sheet.dart';
 import 'package:paper_app/service/trace_service.dart';
 
@@ -40,6 +42,37 @@ class _TracesScreenState extends State<TracesScreen> {
     );
   }
 
+  void _logout() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('알림'),
+            content: const SizedBox(
+              height: 60,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [Text('로그아웃 하시겠습니까?')],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('확인'),
+                onPressed: () {
+                  final SharedPreferencesAsync prefs = SharedPreferencesAsync();
+                  prefs.remove('token');
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (ctx) => const LoginScreen()));
+                },
+              ),
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('취소'))
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,6 +80,28 @@ class _TracesScreenState extends State<TracesScreen> {
           title: const Text('배송조회'),
           backgroundColor: const Color.fromRGBO(1, 20, 57, 1),
           foregroundColor: const Color.fromRGBO(255, 255, 255, 1),
+          automaticallyImplyLeading: false,
+          actions: [
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 16),
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    minimumSize: const Size(60, 30),
+                    padding: const EdgeInsets.all(0),
+                    backgroundColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4)),
+                    side: const BorderSide(
+                        color: Color.fromRGBO(43, 87, 173, 1))),
+                onPressed: () => _logout(),
+                child: const Text(
+                  '로그아웃',
+                  style: TextStyle(color: Color.fromRGBO(139, 177, 235, 1)),
+                ),
+              ),
+            )
+          ],
         ),
         body: Column(
           mainAxisSize: MainAxisSize.min,

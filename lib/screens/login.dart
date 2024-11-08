@@ -172,7 +172,7 @@ class _LoginScreen extends State<LoginScreen> {
               return AlertDialog(
                 title: const Text('알림'),
                 content: const SizedBox(
-                  height: 70,
+                  height: 60,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [

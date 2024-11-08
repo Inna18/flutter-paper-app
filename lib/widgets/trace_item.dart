@@ -1,10 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:paper_app/models/trace.dart';
+import 'package:intl/intl.dart';
 
 class TraceItem extends StatelessWidget {
   const TraceItem({required this.trace, super.key});
 
   final Trace trace;
+
+  String getColdChain(String key) {
+    switch (key) {
+      case 'ALL':
+        return ColdChainType.all.name;
+      case 'PHARMA':
+        return ColdChainType.pharma.name;
+      case 'FROZEN':
+        return ColdChainType.frozen.name;
+      case 'DEEP_FREEZE':
+        return ColdChainType.deepFreeze.name;
+      case 'ETC':
+        return ColdChainType.etc.name;
+      default:
+        return '';
+    }
+  }
+
+  String getInvoiceStatus(String key) {
+    switch (key) {
+      case 'READY':
+        return InvoiceStatus.ready.name;
+      case 'MOVING':
+        return InvoiceStatus.moving.name;
+      case 'DONE':
+        return InvoiceStatus.done.name;
+      case 'SHUTDOWN':
+        return InvoiceStatus.shutdown.name;
+      default:
+        return '';
+    }
+  }
+
+  String checkStatus(String name) {
+    switch (name) {
+      case 'DONE':
+        return '완료';
+      default:
+        return '미완료';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +70,7 @@ class TraceItem extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          '유형: ${trace.coldChainType}',
+                          '유형: ${getColdChain(trace.coldChainType)}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -37,7 +79,7 @@ class TraceItem extends StatelessWidget {
                           child: Text('|'),
                         ),
                         Text(
-                          '주문번호: ${trace.invoiceCode}',
+                          '주문번호: ${trace.invoiceCode ?? '미등록'}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -76,7 +118,7 @@ class TraceItem extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          '출발: ${trace.departureAt}',
+                          '출발: ${DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.parse(trace.departureAt))}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -85,7 +127,7 @@ class TraceItem extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          '도착: ${trace.arrivalAt}',
+                          '도착: ${DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.parse(trace.arrivalAt))}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -94,7 +136,7 @@ class TraceItem extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          '업로드: ${trace.loggingStatus}',
+                          '업로드: ${checkStatus(trace.status)}',
                         ),
                       ],
                     )
@@ -105,7 +147,7 @@ class TraceItem extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          trace.status,
+                          getInvoiceStatus(trace.status),
                           textAlign: TextAlign.end,
                         ),
                       ],
