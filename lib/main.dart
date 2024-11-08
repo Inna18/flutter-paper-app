@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:paper_app/screens/login.dart';
-import 'package:paper_app/screens/traces.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,7 +17,7 @@ class MyApp extends StatelessWidget {
             ColorScheme.fromSeed(seedColor: const Color.fromRGBO(1, 20, 57, 1)),
         useMaterial3: true,
       ),
-      home: const TracesScreen(),
+      home: const LoginScreen(),
     );
   }
 }

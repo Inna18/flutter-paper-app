@@ -2,15 +2,18 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:paper_app/models/trace.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TraceService {
   Future<List<dynamic>> getTraceList() async {
+    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
+    var token = await prefs.getString('token');
+
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Verify':
-          'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmYTU5YWQyNC1hM2ZhLTQyY2QtOWMzZS1jNDk0OWNhOWFhMzMiLCJ0eXBlIjoiUEhBUk1BQ1kiLCJpYXQiOjE3MzA5NTY2ODEsImV4cCI6MTczMDk2ODY4MX0.2s--zoYr6R7zGQefsySmzBmdx-IVFQSIIBxuWKgRsqg'
-    };
+      'Verify': token! 
+      };
     Map<String, String> params = {
       'periodType': 'DEPARTURE_DATE',
       'startDate': '1900-01-01',

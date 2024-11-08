@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:paper_app/screens/traces.dart';
 import 'package:paper_app/service/login_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,15 +17,51 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreen extends State<LoginScreen> {
   final LoginService _loginService = LoginService();
   FocusScopeNode focus = FocusScopeNode();
+  final _passwordController0 = TextEditingController();
+  final _passwordController1 = TextEditingController();
+  final _passwordController2 = TextEditingController();
+  final _passwordController3 = TextEditingController();
+  final _passwordController4 = TextEditingController();
+  final _passwordController5 = TextEditingController();
   final _codeController = TextEditingController();
-
+  var passwordControllers = [];
+  var errorCount = 0;
+  var errorMessage = '';
   var password = ['', '', '', '', '', ''];
+  late FocusNode firstFocusNode;
+
   bool remember = false;
 
   @override
   void dispose() {
     _codeController.dispose();
+
+    _passwordController0.dispose();
+    _passwordController1.dispose();
+    _passwordController2.dispose();
+    _passwordController3.dispose();
+    _passwordController4.dispose();
+    _passwordController5.dispose();
+
+    firstFocusNode.dispose();
+
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    passwordControllers = [
+      _passwordController0,
+      _passwordController1,
+      _passwordController2,
+      _passwordController3,
+      _passwordController4,
+      _passwordController5,
+    ];
+
+    firstFocusNode = FocusNode();
+
+    super.initState();
   }
 
   void _changeFocus(String inputValue, int index) async {
@@ -52,6 +91,8 @@ class _LoginScreen extends State<LoginScreen> {
         width: 40,
         height: 60,
         child: TextField(
+          focusNode: i == 0 ? firstFocusNode : null,
+          controller: passwordControllers[i],
           maxLength: 1,
           style: TextStyle(
             color: focus.hasFocus && i < password.length && password[i] != ''
@@ -84,13 +125,77 @@ class _LoginScreen extends State<LoginScreen> {
     return passwordField;
   }
 
+  List<Widget> getLoginError() {
+    List<Widget> errorField = [];
+    if (errorMessage != '') {
+      errorField.add(Container(
+          margin: const EdgeInsets.symmetric(horizontal: 6),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(errorMessage, style: const TextStyle(color: Colors.red)),
+              Text('다시 확인해주세요. ($errorCount/5)',
+                  style: const TextStyle(color: Colors.red)),
+            ],
+          )));
+    }
+    return errorField;
+  }
+
   void _login() {
+    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
+
     _loginService.login(_codeController.text, password.join()).then((value) {
-      if (value.body.contains('성공')) {
+      var jsonString = value.body;
+      Map<String, dynamic> response = jsonDecode(jsonString);
+      if (response['message'] == '성공') {
+        prefs.setString("token", response['data']['jwt']);
         Navigator.push(
             context, MaterialPageRoute(builder: (ctx) => const TracesScreen()));
       } else {
-        print('error: ${value.body}');
+        setState(() {
+          errorMessage = response['message'];
+          errorCount += 1;
+          password = ['', '', '', '', '', ''];
+          _passwordController0.clear();
+          _passwordController1.clear();
+          _passwordController2.clear();
+          _passwordController3.clear();
+          _passwordController4.clear();
+          _passwordController5.clear();
+        });
+        firstFocusNode.requestFocus();
+        if (errorCount > 5) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('알림'),
+                content: const SizedBox(
+                  height: 70,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('입력 허용 횟수 5회를 초과하였습니다.'),
+                      Text('비밀번호 초기화를 위해'),
+                      Text('거래처 담당자에게 문의 부탁드립니다.'),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('확인'),
+                    onPressed: () {
+                      errorCount = 0;
+                      errorMessage = '';
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        }
       }
     });
   }
@@ -179,6 +284,9 @@ class _LoginScreen extends State<LoginScreen> {
                     const SizedBox(height: 8),
                     Row(
                       children: getPasswordField(),
+                    ),
+                    Row(
+                      children: getLoginError(),
                     ),
                     const SizedBox(height: 16),
                     Row(
