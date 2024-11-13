@@ -12,8 +12,8 @@ class TraceService {
     Map<String, String> headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Verify': token! 
-      };
+      'Verify': token!
+    };
     Map<String, String> params = {
       'periodType': 'DEPARTURE_DATE',
       'startDate': '1900-01-01',
@@ -24,7 +24,7 @@ class TraceService {
       'size': '10',
       // 'sort': 'createdAt,departureAt,desc',
     };
-    var uri = Uri.parse('http://localhost:9000/api/paper/trace')
+    var uri = Uri.parse('http://192.168.0.31:9000/api/paper/trace')
         .replace(queryParameters: params);
     final response = await http.get(uri, headers: headers);
     var jsonResponse = json.decode(response.body);
