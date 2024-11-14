@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:paper_app/screens/traces.dart';
-import 'package:paper_app/service/login_service.dart';
+import 'package:paper_app/src/repository/login_repository.dart';
+import 'package:paper_app/src/screens/traces.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -15,7 +13,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreen extends State<LoginScreen> {
-  final LoginService _loginService = LoginService();
+  final LoginRepository _loginRepository = LoginRepository();
+
   FocusScopeNode focus = FocusScopeNode();
   final _passwordController0 = TextEditingController();
   final _passwordController1 = TextEditingController();
@@ -142,62 +141,60 @@ class _LoginScreen extends State<LoginScreen> {
     return errorField;
   }
 
-  void _login() {
+  void _login() async {
     final SharedPreferencesAsync prefs = SharedPreferencesAsync();
+    Map<String, dynamic> response =
+        await _loginRepository.login(_codeController.text, password.join());
 
-    _loginService.login(_codeController.text, password.join()).then((value) {
-      var jsonString = value.body;
-      Map<String, dynamic> response = jsonDecode(jsonString);
-      if (response['message'] == '성공') {
-        prefs.setString("token", response['data']['jwt']);
-        Navigator.push(
-            context, MaterialPageRoute(builder: (ctx) => const TracesScreen()));
-      } else {
-        setState(() {
-          errorMessage = response['message'];
-          errorCount += 1;
-          password = ['', '', '', '', '', ''];
-          _passwordController0.clear();
-          _passwordController1.clear();
-          _passwordController2.clear();
-          _passwordController3.clear();
-          _passwordController4.clear();
-          _passwordController5.clear();
-        });
-        firstFocusNode.requestFocus();
-        if (errorCount > 5) {
-          showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                title: const Text('알림'),
-                content: const SizedBox(
-                  height: 60,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('입력 허용 횟수 5회를 초과하였습니다.'),
-                      Text('비밀번호 초기화를 위해'),
-                      Text('거래처 담당자에게 문의 부탁드립니다.'),
-                    ],
-                  ),
+    if (response['message'] == '성공') {
+      prefs.setString("token", response['data']['jwt']);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (ctx) => const TracesScreen()));
+    } else {
+      setState(() {
+        errorMessage = response['message'];
+        errorCount += 1;
+        password = ['', '', '', '', '', ''];
+        _passwordController0.clear();
+        _passwordController1.clear();
+        _passwordController2.clear();
+        _passwordController3.clear();
+        _passwordController4.clear();
+        _passwordController5.clear();
+      });
+      firstFocusNode.requestFocus();
+      if (errorCount > 5) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('알림'),
+              content: const SizedBox(
+                height: 60,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('입력 허용 횟수 5회를 초과하였습니다.'),
+                    Text('비밀번호 초기화를 위해'),
+                    Text('거래처 담당자에게 문의 부탁드립니다.'),
+                  ],
                 ),
-                actions: <Widget>[
-                  TextButton(
-                    child: const Text('확인'),
-                    onPressed: () {
-                      errorCount = 0;
-                      errorMessage = '';
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            },
-          );
-        }
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('확인'),
+                  onPressed: () {
+                    errorCount = 0;
+                    errorMessage = '';
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
       }
-    });
+    }
   }
 
   @override

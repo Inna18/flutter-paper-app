@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:paper_app/models/trace.dart';
+import 'package:paper_app/src/models/trace.dart';
 import 'package:intl/intl.dart';
 
 class TraceItem extends StatelessWidget {

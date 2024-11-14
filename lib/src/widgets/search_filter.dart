@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:paper_app/models/trace.dart';
-import 'package:paper_app/widgets/custom_date_picker.dart';
+import 'package:paper_app/src/models/trace.dart';
+import 'package:paper_app/src/widgets/custom_date_picker.dart';
 
 class SearchFilter extends StatefulWidget {
   const SearchFilter({super.key});

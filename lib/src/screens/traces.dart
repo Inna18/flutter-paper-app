@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:paper_app/screens/login.dart';
-import 'package:paper_app/widgets/search_filter.dart';
-import 'package:paper_app/widgets/traces_list.dart';
+import 'package:paper_app/src/repository/trace_repository.dart';
+import 'package:paper_app/src/screens/login.dart';
+import 'package:paper_app/src/widgets/search_filter.dart';
+import 'package:paper_app/src/widgets/traces_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:top_modal_sheet/top_modal_sheet.dart';
-import 'package:paper_app/service/trace_service.dart';
+import 'package:paper_app/src/datasource/remote/trace_data_source.dart';
 
 class TracesScreen extends StatefulWidget {
   const TracesScreen({super.key});
@@ -16,7 +17,7 @@ class TracesScreen extends StatefulWidget {
 }
 
 class _TracesScreenState extends State<TracesScreen> {
-  TraceService traceService = TraceService();
+  final TraceRepository _traceRepository = TraceRepository();
   List<dynamic> traces = [];
 
   @override
@@ -26,7 +27,7 @@ class _TracesScreenState extends State<TracesScreen> {
   }
 
   void _fetchTrace() async {
-    var traceList = await traceService.getTraceList();
+    var traceList = await _traceRepository.getTraceList();
     setState(() {
       traces = traceList;
     });
