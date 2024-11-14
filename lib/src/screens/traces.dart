@@ -1,38 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:paper_app/src/repository/trace_repository.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:paper_app/src/controller/trace_controller.dart';
 import 'package:paper_app/src/screens/login.dart';
 import 'package:paper_app/src/widgets/search_filter.dart';
 import 'package:paper_app/src/widgets/traces_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:top_modal_sheet/top_modal_sheet.dart';
-import 'package:paper_app/src/datasource/remote/trace_data_source.dart';
 
-class TracesScreen extends StatefulWidget {
+class TracesScreen extends ConsumerStatefulWidget {
   const TracesScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() {
+  ConsumerState<TracesScreen> createState() {
     return _TracesScreenState();
   }
 }
 
-class _TracesScreenState extends State<TracesScreen> {
-  final TraceRepository _traceRepository = TraceRepository();
-  List<dynamic> traces = [];
-
-  @override
-  void initState() {
-    _fetchTrace();
-    super.initState();
-  }
-
-  void _fetchTrace() async {
-    var traceList = await _traceRepository.getTraceList();
-    setState(() {
-      traces = traceList;
-    });
-  }
-
+class _TracesScreenState extends ConsumerState<TracesScreen> {
   void _showSearchFilter() {
     showTopModalSheet(
       context,
@@ -76,6 +60,9 @@ class _TracesScreenState extends State<TracesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final traceList = ref.watch(traceNotifierProvider);
+    ref.read(traceNotifierProvider.notifier).fetchTrace();
+
     return Scaffold(
         appBar: AppBar(
           title: const Text('배송조회'),
@@ -168,10 +155,11 @@ class _TracesScreenState extends State<TracesScreen> {
                             ],
                           ),
                           Text(
-                            '총 ${traces.length}건',
+                            '총 ${traceList.length}건',
                             textAlign: TextAlign.start,
                           ),
-                          Expanded(child: TracesList(traceList: traces)),
+                          Expanded(
+                              child: TracesList(traceList: traceList.toList())),
                         ],
                       ),
                     ),
