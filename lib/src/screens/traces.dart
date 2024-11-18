@@ -17,6 +17,20 @@ class TracesScreen extends ConsumerStatefulWidget {
 }
 
 class _TracesScreenState extends ConsumerState<TracesScreen> {
+  final SharedPreferencesAsync prefs = SharedPreferencesAsync();
+  var token;
+  var firstLoad = true;
+
+  @override
+  void initState() {
+    getToken();
+    super.initState();
+  }
+
+  void getToken() async {
+    token = await prefs.getString('token');
+  }
+
   void _showSearchFilter() {
     showTopModalSheet(
       context,
@@ -61,7 +75,20 @@ class _TracesScreenState extends ConsumerState<TracesScreen> {
   @override
   Widget build(BuildContext context) {
     final traceList = ref.watch(traceNotifierProvider);
-    ref.read(traceNotifierProvider.notifier).fetchTrace();
+
+    void fetchTrace() {
+      ref.read(traceNotifierProvider.notifier).fetchTrace();
+    }
+
+    if (firstLoad) {
+      if (token != '') {
+        firstLoad = false;
+        fetchTrace();
+      } else {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (ctx) => const LoginScreen()));
+      }
+    }
 
     return Scaffold(
         appBar: AppBar(

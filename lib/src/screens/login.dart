@@ -147,7 +147,7 @@ class _LoginScreen extends State<LoginScreen> {
         await _loginRepository.login(_codeController.text, password.join());
 
     if (response['message'] == '성공') {
-      prefs.setString("token", response['data']['jwt']);
+      prefs.getString("token");
       Navigator.push(
           context, MaterialPageRoute(builder: (ctx) => const TracesScreen()));
     } else {

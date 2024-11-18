@@ -4,14 +4,15 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 class TraceController extends Notifier<Set<Trace>> {
   final TraceRepository _traceRepository = TraceRepository();
+  List<dynamic> traceList = [];
 
   @override
   Set<Trace> build() {
-    return {};
+    return {...traceList};
   }
 
   void fetchTrace() async {
-    var traceList = await _traceRepository.getTraceList();
+    traceList = await _traceRepository.getTraceList();
     state = {...traceList};
   }
 }
