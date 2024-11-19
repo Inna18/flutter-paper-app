@@ -11,8 +11,8 @@ class TraceController extends Notifier<Set<Trace>> {
     return {...traceList};
   }
 
-  void fetchTrace() async {
-    traceList = await _traceRepository.getTraceList();
+  void fetchTrace(Map<String, String> params) async {
+    traceList = await _traceRepository.getTraceList(params);
     state = {...traceList};
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:paper_app/src/controller/trace_controller.dart';
+import 'package:paper_app/src/models/trace.dart';
 import 'package:paper_app/src/screens/login.dart';
 import 'package:paper_app/src/widgets/search_filter.dart';
 import 'package:paper_app/src/widgets/traces_list.dart';
@@ -31,63 +32,78 @@ class _TracesScreenState extends ConsumerState<TracesScreen> {
     token = await prefs.getString('token');
   }
 
-  void _showSearchFilter() {
-    showTopModalSheet(
-      context,
-      const SearchFilter(),
-      backgroundColor: Colors.white,
-      borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
-    );
-  }
-
-  void _logout() {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('알림'),
-            content: const SizedBox(
-              height: 60,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [Text('로그아웃 하시겠습니까?')],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('확인'),
-                onPressed: () {
-                  final SharedPreferencesAsync prefs = SharedPreferencesAsync();
-                  prefs.remove('token');
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (ctx) => const LoginScreen()));
-                },
-              ),
-              TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('취소'))
-            ],
-          );
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     final traceList = ref.watch(traceNotifierProvider);
 
-    void fetchTrace() {
-      ref.read(traceNotifierProvider.notifier).fetchTrace();
+    void fetchTrace(Map<String, String> params) {
+      ref
+          .read(traceNotifierProvider.notifier)
+          .fetchTrace(params);
     }
 
     if (firstLoad) {
       if (token != '') {
         firstLoad = false;
-        fetchTrace();
+        Map<String, String> params = {
+          'periodType': 'DEPARTURE_DATE',
+          'startDate': '1900-01-01',
+          'endDate': '2024-10-23',
+          'coldChainType': '',
+          'keyword': '',
+          'page': '0',
+          'size': '10',
+        };
+        fetchTrace(
+            params);
       } else {
         Navigator.push(
             context, MaterialPageRoute(builder: (ctx) => const LoginScreen()));
       }
+    }
+
+    void showSearchFilter() {
+      showTopModalSheet(
+        context,
+        SearchFilter(fetchTrace: fetchTrace),
+        backgroundColor: Colors.white,
+        borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
+      );
+    }
+
+    void logout() {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('알림'),
+              content: const SizedBox(
+                height: 60,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [Text('로그아웃 하시겠습니까?')],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('확인'),
+                  onPressed: () {
+                    final SharedPreferencesAsync prefs =
+                        SharedPreferencesAsync();
+                    prefs.remove('token');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (ctx) => const LoginScreen()));
+                  },
+                ),
+                TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('취소'))
+              ],
+            );
+          });
     }
 
     return Scaffold(
@@ -109,7 +125,7 @@ class _TracesScreenState extends ConsumerState<TracesScreen> {
                         borderRadius: BorderRadius.circular(4)),
                     side: const BorderSide(
                         color: Color.fromRGBO(43, 87, 173, 1))),
-                onPressed: () => _logout(),
+                onPressed: () => logout(),
                 child: const Text(
                   '로그아웃',
                   style: TextStyle(color: Color.fromRGBO(139, 177, 235, 1)),
@@ -149,7 +165,7 @@ class _TracesScreenState extends ConsumerState<TracesScreen> {
                                       padding: const EdgeInsets.all(0),
                                       splashFactory: NoSplash.splashFactory,
                                     ),
-                                    onPressed: () => _showSearchFilter(),
+                                    onPressed: () => showSearchFilter(),
                                     child: Container(
                                       width: 500,
                                       margin: const EdgeInsets.symmetric(

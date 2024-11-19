@@ -19,7 +19,13 @@ enum InvoiceStatus {
   const InvoiceStatus(this.name);
 }
 
-enum SearchPeriodType { departureAt, arrivalAt }
+enum SearchPeriodType {
+  departureAt('DEPARTURE_DATE'),
+  arrivalAt('ARRIVAL_DATE');
+
+  final String name;
+  const SearchPeriodType(this.name);
+}
 
 class Trace {
   const Trace({

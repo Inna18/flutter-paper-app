@@ -1,21 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:paper_app/src/models/trace.dart';
 import 'package:paper_app/src/widgets/custom_date_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class SearchFilter extends StatefulWidget {
-  const SearchFilter({super.key});
+class SearchFilter extends ConsumerStatefulWidget {
+  SearchFilter({required this.fetchTrace, super.key});
+
+  void Function(Map<String, String> params) fetchTrace;
 
   @override
-  State<StatefulWidget> createState() {
+  ConsumerState<SearchFilter> createState() {
     return _SearchFilterState();
   }
 }
 
-class _SearchFilterState extends State<SearchFilter> {
+class _SearchFilterState extends ConsumerState<SearchFilter> {
   SearchPeriodType searchType = SearchPeriodType.departureAt;
-  DateTime startAt = DateTime.now();
+  DateTime startAt = DateTime.utc(1900, 1, 1);
   DateTime endAt = DateTime.now();
-  String searchColdChain = 'all';
+  String searchColdChain = '';
   String keyword = '';
 
   void _changeSelectPeriodType(SearchPeriodType periodType) {
@@ -24,7 +29,10 @@ class _SearchFilterState extends State<SearchFilter> {
     });
   }
 
-  void _selectRange(List<DateTime> date) {}
+  void _selectRange(List<DateTime> date) {
+    startAt = date[0];
+    endAt = date[1];
+  }
 
   void _changeSearchColdChain(String coldType) {
     setState(() {
@@ -32,12 +40,26 @@ class _SearchFilterState extends State<SearchFilter> {
     });
   }
 
+  void _search() {
+    Map<String, String> params = {
+      'periodType': searchType.name,
+      'startDate': DateFormat('yyyy-MM-dd').format(startAt),
+      'endDate': DateFormat('yyyy-MM-dd').format(endAt),
+      'coldChainType': searchColdChain,
+      'keyword': keyword,
+      'page': '0',
+      'size': '10',
+    };
+    Navigator.of(context).pop();
+    widget.fetchTrace(params);
+  }
+
   String _getLabel(String coldChain) {
-    if (coldChain == 'all') return '전체';
-    if (coldChain == 'pharma') return '냉장';
-    if (coldChain == 'frozen') return '냉동1';
-    if (coldChain == 'deep_freeze') return '냉동2';
-    if (coldChain == 'etc') return '사용자 설정';
+    if (coldChain == '') return '전체';
+    if (coldChain == 'PHARMA') return '냉장';
+    if (coldChain == 'FROZEN') return '냉동1';
+    if (coldChain == 'DEEP_FREEZE') return '냉동2';
+    if (coldChain == 'ETC') return '사용자 설정';
     return '';
   }
 
@@ -110,7 +132,7 @@ class _SearchFilterState extends State<SearchFilter> {
             ),
           ),
           CustomDatePicker(
-              defaultRange: [startAt, endAt], selectRange: _selectRange),
+              selectRange: _selectRange),
           const Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -126,7 +148,7 @@ class _SearchFilterState extends State<SearchFilter> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Row(
-                  children: ['all', 'pharma', 'frozen', 'deep_freeze', 'etc']
+                  children: ['', 'PHARMA', 'FROZEN', 'DEEP_FREEZE', 'ETC']
                       .map(
                         (coldChain) => InkWell(
                           onTap: () => _changeSearchColdChain(coldChain),
@@ -165,9 +187,12 @@ class _SearchFilterState extends State<SearchFilter> {
           ),
           const SizedBox(height: 8),
           TextField(
-            onChanged: (value) {},
+            onChanged: (value) => {keyword = value},
             decoration: InputDecoration(
-                contentPadding: const EdgeInsets.all(10),
+                hintText: '출고자, S/N, 주문번호를 입력해주세요.',
+                hintStyle:
+                    const TextStyle(color: Color.fromRGBO(161, 163, 179, 1)),
+                contentPadding: const EdgeInsets.all(12),
                 suffixIcon: const Icon(Icons.search),
                 iconColor: const Color.fromRGBO(214, 220, 237, 1),
                 focusedBorder: OutlineInputBorder(
@@ -193,7 +218,7 @@ class _SearchFilterState extends State<SearchFilter> {
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(4))),
-            onPressed: () {},
+            onPressed: () => _search(),
             child: const Text(
               '검색',
               style: TextStyle(fontWeight: FontWeight.bold),

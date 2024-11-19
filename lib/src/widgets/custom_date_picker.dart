@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CustomDatePicker extends StatefulWidget {
-  const CustomDatePicker(
-      {required this.defaultRange, required this.selectRange, super.key});
+  CustomDatePicker({required this.selectRange, super.key});
 
-  final List<DateTime> defaultRange;
-  final void Function(List<DateTime> dates) selectRange;
+  // final List<DateTime> defaultRange;
+  void Function(List<DateTime> dates) selectRange;
 
   @override
   State<StatefulWidget> createState() {
@@ -17,7 +16,7 @@ class CustomDatePicker extends StatefulWidget {
 class _CustomDatePickerState extends State<CustomDatePicker> {
   List<String> weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   DateTime _today = DateTime.now();
-  final List<DateTime> _selectedRange = [DateTime.now(), DateTime.now()];
+  List<DateTime> _selectedRange = [DateTime.now(), DateTime.now()];
   // Sunday = 0
   int prevMLastDay =
       (DateTime(DateTime.now().year, DateTime.now().month, 0).day);
@@ -31,6 +30,11 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
   int lastDay = 0;
   List<List<int>> calendar = [];
   bool isSelected = false;
+
+  DateTime startAt = DateTime.now();
+  DateTime endAt = DateTime.now();
+  bool startAtChosen = false;
+  bool endAtChosen = false;
 
   @override
   void initState() {
@@ -110,16 +114,63 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
           DateTime.now().day == day;
     }
 
-    void setSelectedDate(int type, int day) {
-      // if (type == 0) {
-      //   _selectedDate = DateTime(_today.year, _today.month - 1, day);
-      // } else if (type == 1) {
-      //   _selectedDate = DateTime(_today.year, _today.month, day);
-      // } else {
-      //   _selectedDate = DateTime(_today.year, _today.month + 1, day);
-      // }
+    void setDate(String date, int type, day) {
+      DateTime tempDate = DateTime.now();
+      if (type == 0) {
+        tempDate = DateTime(_today.year, _today.month - 1, day);
+      } else if (type == 1) {
+        tempDate = DateTime(_today.year, _today.month, day);
+      } else {
+        tempDate = DateTime(_today.year, _today.month + 1, day);
+      }
 
-      // widget.selectDate(_selectedDate!);
+      if (date == 'start') {
+        startAt = tempDate;
+      } else {
+        endAt = tempDate;
+      }
+    }
+
+    void setSelectedDate(int type, int day) {
+      if (!startAtChosen || endAtChosen) {
+        setDate('start', type, day);
+        startAtChosen = true;
+        endAtChosen = false;
+        endAt = startAt;
+      } else {
+        setDate('end', type, day);
+        if (endAt.isBefore(startAt)) {
+          var temp = startAt;
+          startAt = endAt;
+          endAt = temp;
+        }
+        endAtChosen = true;
+      }
+
+      if (startAtChosen && endAtChosen) {
+        _selectedRange = [startAt, endAt];
+        widget.selectRange(_selectedRange);
+      }
+    }
+
+    bool isStartOrEnd(int day, int type) {
+      if (type == 0) {
+        if (startAt == DateTime(_today.year, _today.month - 1, day) ||
+            endAt == DateTime(_today.year, _today.month - 1, day)) {
+          return true;
+        }
+      } else if (type == 1) {
+        if (startAt == DateTime(_today.year, _today.month, day) ||
+            endAt == DateTime(_today.year, _today.month, day)) {
+          return true;
+        }
+      } else {
+        if (startAt == DateTime(_today.year, _today.month + 1, day) ||
+            endAt == DateTime(_today.year, _today.month + 1, day)) {
+          return true;
+        }
+      }
+      return false;
     }
 
     return SizedBox(
@@ -186,16 +237,30 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                     child: Container(
                         height: 32,
                         width: 36,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 6, vertical: 4),
                         child: Align(
                           alignment: Alignment.center,
-                          child: Text(
-                            day.toString(),
-                            style: TextStyle(
-                              color: Colors.grey[500],
-                            ),
-                          ),
+                          child: isStartOrEnd(day, 0)
+                              ? Container(
+
+                                  padding: day < 10
+                                      ? const EdgeInsets.symmetric(
+                                          horizontal: 12, vertical: 6)
+                                      : const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 6),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: const Color.fromRGBO(
+                                          33, 150, 243, 1)),
+                                  child: Text(day.toString(),
+                                      style:
+                                          const TextStyle(color: Colors.white)),
+                                )
+                              : Text(
+                                  day.toString(),
+                                  style: TextStyle(
+                                    color: Colors.grey[500],
+                                  ),
+                                ),
                         )),
                   )),
               ...calendar[1].map((day) => GestureDetector(
@@ -223,7 +288,23 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                                                 33, 150, 243, 1))),
                                     child: Text(day.toString()),
                                   )
-                                : Text(day.toString()))),
+                                : isStartOrEnd(day, 1)
+                                    ? Container(
+                                        padding: day < 10
+                                            ? const EdgeInsets.symmetric(
+                                                horizontal: 12, vertical: 6)
+                                            : const EdgeInsets.symmetric(
+                                                horizontal: 8, vertical: 6),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            color: const Color.fromRGBO(
+                                                33, 150, 243, 1)),
+                                        child: Text(day.toString(),
+                                            style: const TextStyle(
+                                                color: Colors.white)),
+                                      )
+                                    : Text(day.toString()))),
                   )),
               ...calendar[2].map((day) => GestureDetector(
                     // nextMonth dates
@@ -239,10 +320,25 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                         width: 36,
                         child: Align(
                           alignment: Alignment.center,
-                          child: Text(
-                            day.toString(),
-                            style: TextStyle(color: Colors.grey[500]),
-                          ),
+                          child: isStartOrEnd(day, 2)
+                              ? Container(
+                                  padding: day < 10
+                                      ? const EdgeInsets.symmetric(
+                                          horizontal: 12, vertical: 6)
+                                      : const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 6),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: const Color.fromRGBO(
+                                          33, 150, 243, 1)),
+                                  child: Text(day.toString(),
+                                      style:
+                                          const TextStyle(color: Colors.white)),
+                                )
+                              : Text(
+                                  day.toString(),
+                                  style: TextStyle(color: Colors.grey[500]),
+                                ),
                         )),
                   )),
             ],
