@@ -93,6 +93,7 @@ class _LoginScreen extends State<LoginScreen> {
           focusNode: i == 0 ? firstFocusNode : null,
           controller: passwordControllers[i],
           maxLength: 1,
+          keyboardType: TextInputType.number,
           style: TextStyle(
             color: focus.hasFocus && i < password.length && password[i] != ''
                 ? const Color.fromRGBO(70, 133, 255, 1)
@@ -141,58 +142,73 @@ class _LoginScreen extends State<LoginScreen> {
     return errorField;
   }
 
-  void _login() async {
-    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
-    Map<String, dynamic> response =
-        await _loginRepository.login(_codeController.text, password.join());
+  bool _filled() {
+    if (_codeController.text != '' &&
+        _passwordController0.text != '' &&
+        _passwordController1.text != '' &&
+        _passwordController2.text != '' &&
+        _passwordController3.text != '' &&
+        _passwordController4.text != '' &&
+        _passwordController5.text != '') {
+      return true;
+    }
+    return false;
+  }
 
-    if (response['message'] == '성공') {
-      prefs.getString("token");
-      Navigator.push(
-          context, MaterialPageRoute(builder: (ctx) => const TracesScreen()));
-    } else {
-      setState(() {
-        errorMessage = response['message'];
-        errorCount += 1;
-        password = ['', '', '', '', '', ''];
-        _passwordController0.clear();
-        _passwordController1.clear();
-        _passwordController2.clear();
-        _passwordController3.clear();
-        _passwordController4.clear();
-        _passwordController5.clear();
-      });
-      firstFocusNode.requestFocus();
-      if (errorCount > 5) {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('알림'),
-              content: const SizedBox(
-                height: 60,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('입력 허용 횟수 5회를 초과하였습니다.'),
-                    Text('비밀번호 초기화를 위해'),
-                    Text('거래처 담당자에게 문의 부탁드립니다.'),
-                  ],
+  void _login() async {
+    if (_filled()) {
+      final SharedPreferencesAsync prefs = SharedPreferencesAsync();
+      Map<String, dynamic> response =
+          await _loginRepository.login(_codeController.text, password.join());
+
+      if (response['message'] == '성공') {
+        prefs.getString("token");
+        Navigator.push(
+            context, MaterialPageRoute(builder: (ctx) => const TracesScreen()));
+      } else {
+        setState(() {
+          errorMessage = response['message'];
+          errorCount += 1;
+          password = ['', '', '', '', '', ''];
+          _passwordController0.clear();
+          _passwordController1.clear();
+          _passwordController2.clear();
+          _passwordController3.clear();
+          _passwordController4.clear();
+          _passwordController5.clear();
+        });
+        firstFocusNode.requestFocus();
+        if (errorCount > 5) {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('알림'),
+                content: const SizedBox(
+                  height: 66,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('입력 허용 횟수 5회를 초과하였습니다.'),
+                      Text('비밀번호 초기화를 위해'),
+                      Text('거래처 담당자에게 문의 부탁드립니다.'),
+                    ],
+                  ),
                 ),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('확인'),
-                  onPressed: () {
-                    errorCount = 0;
-                    errorMessage = '';
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text('확인'),
+                    onPressed: () {
+                      errorCount = 0;
+                      errorMessage = '';
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        }
       }
     }
   }
@@ -289,8 +305,13 @@ class _LoginScreen extends State<LoginScreen> {
                             ],
                           ),
                           const SizedBox(height: 8),
-                          Row(
-                            children: getPasswordField(),
+                          IntrinsicHeight(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisSize: MainAxisSize.min,
+                              children: getPasswordField(),
+                            ),
                           ),
                           Row(
                             children: getLoginError(),
@@ -334,8 +355,9 @@ class _LoginScreen extends State<LoginScreen> {
                                 minimumSize: const Size(300, 54),
                                 padding: const EdgeInsets.all(2),
                                 shadowColor: Colors.transparent,
-                                backgroundColor:
-                                    const Color.fromRGBO(70, 133, 255, 1),
+                                backgroundColor: _filled()
+                                    ? const Color.fromRGBO(70, 133, 255, 1)
+                                    : const Color.fromARGB(126, 160, 191, 255),
                                 foregroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(4))),

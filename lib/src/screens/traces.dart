@@ -37,9 +37,7 @@ class _TracesScreenState extends ConsumerState<TracesScreen> {
     final traceList = ref.watch(traceNotifierProvider);
 
     void fetchTrace(Map<String, String> params) {
-      ref
-          .read(traceNotifierProvider.notifier)
-          .fetchTrace(params);
+      ref.read(traceNotifierProvider.notifier).fetchTrace(params);
     }
 
     if (firstLoad) {
@@ -54,8 +52,7 @@ class _TracesScreenState extends ConsumerState<TracesScreen> {
           'page': '0',
           'size': '10',
         };
-        fetchTrace(
-            params);
+        fetchTrace(params);
       } else {
         Navigator.push(
             context, MaterialPageRoute(builder: (ctx) => const LoginScreen()));
@@ -87,6 +84,9 @@ class _TracesScreenState extends ConsumerState<TracesScreen> {
               ),
               actions: <Widget>[
                 TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text('취소')),
+                TextButton(
                   child: const Text('확인'),
                   onPressed: () {
                     final SharedPreferencesAsync prefs =
@@ -97,10 +97,7 @@ class _TracesScreenState extends ConsumerState<TracesScreen> {
                         MaterialPageRoute(
                             builder: (ctx) => const LoginScreen()));
                   },
-                ),
-                TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('취소'))
+                )
               ],
             );
           });

@@ -11,10 +11,12 @@ class LoginRepository {
     return _loginDataSource.login(code, otp).then((value) {
       var jsonString = value.body;
       Map<String, dynamic> response = jsonDecode(jsonString);
-      var token = response['data']['jwt'];
-      var isValid = TokenUtils.isValid(token);
-      if (isValid) {
-        prefs.setString("token", token);
+      if (response['data'] != null) {
+        var token = response['data']['jwt'];
+        var isValid = TokenUtils.isValid(token);
+        if (isValid) {
+          prefs.setString("token", token);
+        }
       }
 
       return response;
