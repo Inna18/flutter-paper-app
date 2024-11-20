@@ -197,8 +197,8 @@ class _SearchFilterState extends ConsumerState<SearchFilter> {
                 hintStyle:
                     const TextStyle(color: Color.fromRGBO(161, 163, 179, 1)),
                 contentPadding: const EdgeInsets.all(12),
-                suffixIcon: const Icon(Icons.search),
-                iconColor: const Color.fromRGBO(214, 220, 237, 1),
+                // suffixIcon: const Icon(Icons.search),
+                // iconColor: const Color.fromRGBO(214, 220, 237, 1),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                   borderSide: const BorderSide(

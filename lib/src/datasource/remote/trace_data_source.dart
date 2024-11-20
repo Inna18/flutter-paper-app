@@ -6,8 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class TraceDataSource {
   Future<List<dynamic>> getTraceList(Map<String, String> params) async {
-    final SharedPreferencesAsync prefs = SharedPreferencesAsync();
-    var token = await prefs.getString('token');
+    final prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
 
     Map<String, String> headers = {
       'Content-Type': 'application/json',
@@ -20,7 +20,7 @@ class TraceDataSource {
     var jsonResponse = json.decode(response.body);
     var list = jsonResponse['data']['list'];
     List<dynamic> traces = list.map((json) => Trace.fromJson(json)).toList();
-    
+
     return traces;
   }
 }

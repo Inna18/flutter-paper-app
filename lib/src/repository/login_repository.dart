@@ -5,9 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginRepository {
   final LoginDataSource _loginDataSource = LoginDataSource();
-  final SharedPreferencesAsync prefs = SharedPreferencesAsync();
 
-  Future<Map<String, dynamic>> login(String code, String otp) {
+  Future<Map<String, dynamic>> login(String code, String otp) async {
+    final prefs = await SharedPreferences.getInstance();
     return _loginDataSource.login(code, otp).then((value) {
       var jsonString = value.body;
       Map<String, dynamic> response = jsonDecode(jsonString);

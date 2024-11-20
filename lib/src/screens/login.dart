@@ -14,7 +14,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreen extends State<LoginScreen> {
   final LoginRepository _loginRepository = LoginRepository();
-
   FocusScopeNode focus = FocusScopeNode();
   final _passwordController0 = TextEditingController();
   final _passwordController1 = TextEditingController();
@@ -57,10 +56,28 @@ class _LoginScreen extends State<LoginScreen> {
       _passwordController4,
       _passwordController5,
     ];
-
     firstFocusNode = FocusNode();
+    setRemember();
+    setCode();
 
     super.initState();
+  }
+
+  void setCode() async {
+    final prefs = await SharedPreferences.getInstance();
+    var check = prefs.getBool('remember');
+    var code = prefs.getString('clientCode');
+    if (check == true && code != null) {
+      _codeController.text = code;
+    }
+  }
+
+  void setRemember() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      var check = prefs.getBool('remember');
+      check == null ? remember = false : remember = check;
+    });
   }
 
   void _changeFocus(String inputValue, int index) async {
@@ -156,8 +173,10 @@ class _LoginScreen extends State<LoginScreen> {
   }
 
   void _login() async {
+    final prefs = await SharedPreferences.getInstance();
     if (_filled()) {
-      final SharedPreferencesAsync prefs = SharedPreferencesAsync();
+      prefs.setString('clientCode', _codeController.text);
+      print(prefs.getString('clientCode'));
       Map<String, dynamic> response =
           await _loginRepository.login(_codeController.text, password.join());
 
@@ -211,6 +230,14 @@ class _LoginScreen extends State<LoginScreen> {
         }
       }
     }
+  }
+
+  void _saveCode(value) async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      remember = value;
+      prefs.setBool('remember', remember);
+    });
   }
 
   @override
@@ -329,11 +356,7 @@ class _LoginScreen extends State<LoginScreen> {
                                         fontWeight: FontWeight.bold),
                                   ),
                                   value: remember,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      remember = !remember;
-                                    });
-                                  },
+                                  onChanged: (value) => _saveCode(value),
                                   controlAffinity:
                                       ListTileControlAffinity.leading,
                                   overlayColor: const WidgetStatePropertyAll(

@@ -18,7 +18,6 @@ class TracesScreen extends ConsumerStatefulWidget {
 }
 
 class _TracesScreenState extends ConsumerState<TracesScreen> {
-  final SharedPreferencesAsync prefs = SharedPreferencesAsync();
   var token;
   var firstLoad = true;
 
@@ -29,7 +28,8 @@ class _TracesScreenState extends ConsumerState<TracesScreen> {
   }
 
   void getToken() async {
-    token = await prefs.getString('token');
+    final prefs = await SharedPreferences.getInstance();
+    token = prefs.getString('token');
   }
 
   @override
@@ -88,9 +88,8 @@ class _TracesScreenState extends ConsumerState<TracesScreen> {
                     child: const Text('취소')),
                 TextButton(
                   child: const Text('확인'),
-                  onPressed: () {
-                    final SharedPreferencesAsync prefs =
-                        SharedPreferencesAsync();
+                  onPressed: () async {
+                    final prefs = await SharedPreferences.getInstance();
                     prefs.remove('token');
                     Navigator.push(
                         context,
