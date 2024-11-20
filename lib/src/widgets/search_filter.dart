@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:paper_app/src/models/trace.dart';
 import 'package:paper_app/src/widgets/custom_date_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SearchFilter extends ConsumerStatefulWidget {
   SearchFilter({required this.fetchTrace, super.key});
@@ -69,7 +68,10 @@ class _SearchFilterState extends ConsumerState<SearchFilter> {
       padding: const EdgeInsets.all(24),
       child: Column(
         children: [
-          const SizedBox(height: 40),
+          SizedBox(
+              height: MediaQuery.of(context).viewInsets.bottom > 40
+                  ? 0
+                  : 40 - MediaQuery.of(context).viewInsets.bottom),
           const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -113,7 +115,7 @@ class _SearchFilterState extends ConsumerState<SearchFilter> {
                                   1.0, // This would be the width of the underline
                             ))),
                             child: Text(
-                              periodType.name == 'departureAt'
+                              periodType.name == 'DEPARTURE_DATE'
                                   ? '출발일자'
                                   : '도착일자',
                               style: searchType == periodType
@@ -131,8 +133,7 @@ class _SearchFilterState extends ConsumerState<SearchFilter> {
                       .toList()),
             ),
           ),
-          CustomDatePicker(
-              selectRange: _selectRange),
+          CustomDatePicker(selectRange: _selectRange),
           const Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -185,7 +186,10 @@ class _SearchFilterState extends ConsumerState<SearchFilter> {
                       .toList()),
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(
+              height: MediaQuery.of(context).viewInsets.bottom > 8
+                  ? 0
+                  : 8 - MediaQuery.of(context).viewInsets.bottom),
           TextField(
             onChanged: (value) => {keyword = value},
             decoration: InputDecoration(
@@ -207,7 +211,10 @@ class _SearchFilterState extends ConsumerState<SearchFilter> {
                     ),
                     borderRadius: BorderRadius.circular(8))),
           ),
-          const SizedBox(height: 40),
+          SizedBox(
+              height: MediaQuery.of(context).viewInsets.bottom > 40
+                  ? 0
+                  : 40 - MediaQuery.of(context).viewInsets.bottom),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
