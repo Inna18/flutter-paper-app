@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:paper_app/src/controller/trace_controller.dart';
 import 'package:paper_app/src/models/trace.dart';
 import 'package:paper_app/src/screens/login.dart';
+import 'package:paper_app/src/utils/constants_value.dart';
 import 'package:paper_app/src/widgets/search_filter.dart';
 import 'package:paper_app/src/widgets/traces_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +22,7 @@ class TracesScreen extends ConsumerStatefulWidget {
 class _TracesScreenState extends ConsumerState<TracesScreen> {
   var token;
   var firstLoad = true;
+  var searchParams = null;
 
   @override
   void initState() {
@@ -37,22 +40,25 @@ class _TracesScreenState extends ConsumerState<TracesScreen> {
     final traceList = ref.watch(traceNotifierProvider);
 
     void fetchTrace(Map<String, String> params) {
+      if (firstLoad == false) {
+        searchParams = params;
+      }
       ref.read(traceNotifierProvider.notifier).fetchTrace(params);
     }
 
     if (firstLoad) {
       if (token != '') {
-        firstLoad = false;
         Map<String, String> params = {
           'periodType': 'DEPARTURE_DATE',
           'startDate': '1900-01-01',
-          'endDate': '2024-10-23',
+          'endDate': DateFormat('yyyy-MM-dd').format(DateTime.now()),
           'coldChainType': '',
           'keyword': '',
           'page': '0',
           'size': '10',
         };
         fetchTrace(params);
+        firstLoad = false;
       } else {
         Navigator.push(
             context, MaterialPageRoute(builder: (ctx) => const LoginScreen()));
@@ -174,15 +180,19 @@ class _TracesScreenState extends ConsumerState<TracesScreen> {
                                                   161, 163, 179, 1)),
                                           borderRadius: const BorderRadius.all(
                                               Radius.circular(8))),
-                                      child: const Row(
+                                      child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text('전체',
-                                              style: TextStyle(
+                                          Text(
+                                              searchParams == null
+                                                  ? '전체'
+                                                  : '${searchParams['keyword'] ?? ''} ${ConstantsValue.getLabel(searchParams['coldChainType'], 'coldChain')} ${ConstantsValue.getLabel(searchParams['periodType'], 'periodType')} ${searchParams['startDate']}~${searchParams['endDate']}',
+                                              style: const TextStyle(
                                                   color: Color.fromRGBO(
-                                                      161, 163, 179, 1))),
-                                          Icon(
+                                                      161, 163, 179, 1),
+                                                  fontSize: 12)),
+                                          const Icon(
                                             Icons.search,
                                             color: Color.fromRGBO(
                                                 161, 163, 179, 1),

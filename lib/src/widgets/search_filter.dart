@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:paper_app/src/models/trace.dart';
 import 'package:paper_app/src/widgets/custom_date_picker.dart';
+import 'package:paper_app/src/utils/constants_value.dart';
 
 class SearchFilter extends ConsumerStatefulWidget {
   SearchFilter({required this.fetchTrace, super.key});
@@ -51,15 +52,6 @@ class _SearchFilterState extends ConsumerState<SearchFilter> {
     };
     Navigator.of(context).pop();
     widget.fetchTrace(params);
-  }
-
-  String _getLabel(String coldChain) {
-    if (coldChain == '') return '전체';
-    if (coldChain == 'PHARMA') return '냉장';
-    if (coldChain == 'FROZEN') return '냉동1';
-    if (coldChain == 'DEEP_FREEZE') return '냉동2';
-    if (coldChain == 'ETC') return '사용자 설정';
-    return '';
   }
 
   @override
@@ -170,7 +162,7 @@ class _SearchFilterState extends ConsumerState<SearchFilter> {
                                   1.0, // This would be the width of the underline
                             ))),
                             child: Text(
-                              _getLabel(coldChain),
+                              ConstantsValue.getLabel(coldChain, 'coldChain'),
                               style: searchColdChain == coldChain
                                   ? const TextStyle(
                                       color: Color.fromRGBO(37, 122, 240, 1),
@@ -193,9 +185,9 @@ class _SearchFilterState extends ConsumerState<SearchFilter> {
           TextField(
             onChanged: (value) => {keyword = value},
             decoration: InputDecoration(
-                hintText: '출고자, S/N, 주문번호를 입력해주세요.',
-                hintStyle:
-                    const TextStyle(color: Color.fromRGBO(161, 163, 179, 1)),
+                hintText: '주문번호,출고자,운송자,S/N(별칭),목적지를 입력해주세요.',
+                hintStyle: const TextStyle(
+                    color: Color.fromRGBO(161, 163, 179, 1), fontSize: 12),
                 contentPadding: const EdgeInsets.all(12),
                 // suffixIcon: const Icon(Icons.search),
                 // iconColor: const Color.fromRGBO(214, 220, 237, 1),
