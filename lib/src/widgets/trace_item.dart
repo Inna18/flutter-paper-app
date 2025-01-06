@@ -63,6 +63,7 @@ class TraceItem extends StatelessWidget {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +89,7 @@ class TraceItem extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          '출고자: ${trace.username}',
+                          '출고자: ${trace.operator}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -97,7 +98,7 @@ class TraceItem extends StatelessWidget {
                           child: Text('|'),
                         ),
                         Text(
-                          'S/N: ${trace.serialNumber}',
+                          '운송자: ${trace.transporter}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -105,10 +106,28 @@ class TraceItem extends StatelessWidget {
                     ),
                     Row(
                       children: [
+                        Text(
+                          '기기유형: ${trace.deviceModelCode}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          'S/N(별칭): ${trace.deviceName}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
                         SizedBox(
                           width: 224,
                           child: Text(
-                            '목적지: ${trace.groupName}',
+                            '목적지: ${trace.groupName ?? '미지정'}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -121,6 +140,10 @@ class TraceItem extends StatelessWidget {
                           '출발: ${DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.parse(trace.departureAt))}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: trace.departureAt != null
+                                  ? const Color.fromRGBO(37, 122, 240, 1)
+                                  : const Color.fromRGBO(160, 171, 201, 1)),
                         ),
                       ],
                     ),
@@ -130,6 +153,10 @@ class TraceItem extends StatelessWidget {
                           '도착: ${DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.parse(trace.arrivalAt))}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: trace.arrivalAt != null
+                                  ? const Color.fromRGBO(37, 122, 240, 1)
+                                  : const Color.fromRGBO(160, 171, 201, 1)),
                         ),
                       ],
                     ),
@@ -137,7 +164,11 @@ class TraceItem extends StatelessWidget {
                       children: [
                         Text(
                           '업로드: ${checkStatus(trace.status)}',
-                        ),
+                          style: TextStyle(
+                              color: trace.status == 'DONE'
+                                  ? const Color.fromRGBO(37, 122, 240, 1)
+                                  : const Color.fromRGBO(160, 171, 201, 1)),
+                        )
                       ],
                     )
                   ],
@@ -149,6 +180,9 @@ class TraceItem extends StatelessWidget {
                         Text(
                           getInvoiceStatus(trace.status),
                           textAlign: TextAlign.end,
+                          style: const TextStyle(
+                              color: Color.fromRGBO(37, 122, 240, 1),
+                              fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),

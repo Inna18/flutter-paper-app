@@ -65,8 +65,8 @@ class Trace {
   final String loggingMode;
   final int eventCount;
   final int battery;
-  final String departureAt;
-  final String arrivalAt;
+  final dynamic departureAt;
+  final dynamic arrivalAt;
   final dynamic serviceClientName;
   final dynamic deviceModelCode;
   final String deviceName;

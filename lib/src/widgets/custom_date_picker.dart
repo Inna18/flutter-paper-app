@@ -14,7 +14,7 @@ class CustomDatePicker extends StatefulWidget {
 }
 
 class _CustomDatePickerState extends State<CustomDatePicker> {
-  List<String> weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  List<String> weekdays = ['일', '월', '화', '수', '목', '금', '토'];
   DateTime _today = DateTime.now();
   List<DateTime> _selectedRange = [DateTime.now(), DateTime.now()];
   // Sunday = 0
@@ -211,7 +211,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                     child: Align(
                       alignment: Alignment.center,
                       child: Text(weekday,
-                          style: weekday == 'Sat' || weekday == 'Sun'
+                          style: weekday == '토' || weekday == '일'
                               ? TextStyle(color: Colors.red[300])
                               : TextStyle(color: Colors.blue[500])),
                     )))
@@ -241,7 +241,6 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
                           alignment: Alignment.center,
                           child: isStartOrEnd(day, 0)
                               ? Container(
-
                                   padding: day < 10
                                       ? const EdgeInsets.symmetric(
                                           horizontal: 12, vertical: 6)

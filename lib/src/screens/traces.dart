@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:paper_app/src/controller/trace_controller.dart';
-import 'package:paper_app/src/models/trace.dart';
 import 'package:paper_app/src/screens/login.dart';
 import 'package:paper_app/src/utils/constants_value.dart';
 import 'package:paper_app/src/widgets/search_filter.dart';
@@ -187,7 +186,7 @@ class _TracesScreenState extends ConsumerState<TracesScreen> {
                                           Text(
                                               searchParams == null
                                                   ? '전체'
-                                                  : '${searchParams['keyword'] ?? ''} ${ConstantsValue.getLabel(searchParams['coldChainType'], 'coldChain')} ${ConstantsValue.getLabel(searchParams['periodType'], 'periodType')} ${searchParams['startDate']}~${searchParams['endDate']}',
+                                                  : '${searchParams['keyword'].length >= 8 ? searchParams['keyword'].substring(0, 8) + '...' : searchParams['keyword'] ?? ''} ${ConstantsValue.getLabel(searchParams['coldChainType'], 'coldChain')} ${ConstantsValue.getLabel(searchParams['periodType'], 'periodType')} ${searchParams['startDate']}~${searchParams['endDate']}',
                                               style: const TextStyle(
                                                   color: Color.fromRGBO(
                                                       161, 163, 179, 1),
@@ -203,9 +202,23 @@ class _TracesScreenState extends ConsumerState<TracesScreen> {
                               ),
                             ],
                           ),
-                          Text(
-                            '총 ${traceList.length}건',
-                            textAlign: TextAlign.start,
+                          Row(
+                            children: [
+                              const Text(
+                                '총 ',
+                                textAlign: TextAlign.start,
+                              ),
+                              Text(
+                                '${traceList.length}',
+                                textAlign: TextAlign.start,
+                                style: const TextStyle(
+                                    color: Color.fromRGBO(37, 122, 240, 1)),
+                              ),
+                              const Text(
+                                '건',
+                                textAlign: TextAlign.start,
+                              ),
+                            ],
                           ),
                           Expanded(
                               child: TracesList(traceList: traceList.toList())),
